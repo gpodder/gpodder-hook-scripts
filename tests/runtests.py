@@ -99,6 +99,7 @@ if __name__ == "__main__":
     init_data(gpo_dir)
 
     #import all test files
+    import enqueue_in_mediaplayer_test
     import flv2mp4_test
     import m4a_converter_test
     import normalize_audio_test
@@ -110,7 +111,8 @@ if __name__ == "__main__":
 
     loader = unittest.TestLoader()
 
-    suite = loader.loadTestsFromModule(m4a_converter_test)
+    suite = loader.loadTestsFromModule(enqueue_in_mediaplayer_test)
+    suite.addTests(loader.loadTestsFromModule(m4a_converter_test))
     suite.addTests(loader.loadTestsFromModule(normalize_audio_test))
     suite.addTests(loader.loadTestsFromModule(rename_download_test))
     suite.addTests(loader.loadTestsFromModule(rm_ogg_cover_test))
