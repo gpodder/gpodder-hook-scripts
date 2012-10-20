@@ -98,7 +98,6 @@ if __name__ == "__main__":
     #import all test files
     import bittorrent_downloader_test
     import cmml_generator_test
-    import enqueue_in_vlc_test
     import mp3gain_test
     import tfh_shownotes_test
     import zpravy_test
@@ -107,7 +106,6 @@ if __name__ == "__main__":
 
     suite = loader.loadTestsFromModule(bittorrent_downloader_test)
     suite.addTests(loader.loadTestsFromModule(cmml_generator_test))
-    suite.addTests(loader.loadTestsFromModule(enqueue_in_vlc_test))
     suite.addTests(loader.loadTestsFromModule(mp3gain_test))
     suite.addTests(loader.loadTestsFromModule(tfh_shownotes_test))
     suite.addTests(loader.loadTestsFromModule(zpravy_test))
