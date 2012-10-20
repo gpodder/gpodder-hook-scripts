@@ -9,7 +9,7 @@ import gpodder
 from config import data
 import utils
 
-EXTENSION_NAME = 'enqueue_in_vlc'
+EXTENSION_NAME = 'enqueue_in_mediaplayer'
 EXTENSION_FILE = os.path.join(os.environ['GPODDER_EXTENSIONS'], EXTENSION_NAME+'.py')
 
 
@@ -33,9 +33,9 @@ class TestEnqueueInVLC(unittest.TestCase):
     def test_menu_entry(self):
         menu_entry = gpodder.user_extensions.on_episodes_context_menu([self.episode,])
         self.assertTrue(isinstance(menu_entry, list))
-        self.assertEqual(len(menu_entry), 1)
+        self.assertTrue(len(menu_entry) >  0)
 
         self.assertTrue(isinstance(menu_entry[0], tuple))
         self.assertEqual(len(menu_entry[0]), 2)
 
-        self.assertEqual(menu_entry[0][0], 'Enqueue in VLC')
+        self.assertTrue('Enqueue in VLC' in map(lambda x: x[0], menu_entry))

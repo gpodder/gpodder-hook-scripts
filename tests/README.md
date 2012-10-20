@@ -1,12 +1,15 @@
 # Requirements
 
  * transmission-cli
+ * vlc
  * mp3gain
  * ffmpeg
  * steghide
  * normalize
  * python-eyed3
  * python-mutagen
+ * python-mock
+ * python-beautifulsoup
 
 # First run
 
