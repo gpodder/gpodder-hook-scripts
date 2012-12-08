@@ -4,9 +4,11 @@
  * mp3gain
  * ffmpeg
  * steghide
- * normalize
+ * normalize-audio
  * python-eyed3
  * python-mutagen
+
+ * libavcodec-extra-53 (at least on Ubuntu 12.10)
 
 # First run
 
