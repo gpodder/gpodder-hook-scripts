@@ -23,6 +23,7 @@ _ = gpodder.gettext
 __title__ = _('Convert .flv files from YouTube to .mp4')
 __description__ = _('Useful for playing downloaded videos on hardware players')
 __authors__ = 'Thomas Perl <thp@gpodder.org>, Bernd Schlapsi <brot@gmx.info>'
+__category__ = 'post-download'
 
 DefaultConfig = {
     'context_menu': True, # Show the conversion option in the context menu
@@ -81,12 +82,15 @@ class gPodderExtension:
                 stderr=subprocess.PIPE)
         stdout, stderr = ffmpeg.communicate()
 
-        if ffmpeg.returncode == 0:
-            logger.info('FLV conversion successful.')
+        if ffmpeg.returncode == 0:            
             util.rename_episode_file(episode, new_filename)
             os.remove(old_filename)
+            
+            logger.info('FLV conversion successful.')
+            gpodder.user_extensions.on_notification_show(_('File converted'), episode.title)
         else:
             logger.warn('Error converting file: %s / %s', stdout, stderr)
+            gpodder.user_extensions.on_notification_show(_('Conversion failed'), episode.title)
 
     def _convert_episodes(self, episodes):
         for episode in episodes:
