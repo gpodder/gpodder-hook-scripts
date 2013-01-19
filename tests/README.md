@@ -7,8 +7,13 @@
  * normalize-audio
  * python-eyed3
  * python-mutagen
+ * python-mock
+ * python-feedparser
+ * python-mygpoclient
 
  * libavcodec-extra-53 (at least on Ubuntu 12.10)
+ * lame (to encode mp3 for normalize-mp3)
+ * mpg123 (to decode mp3 for normalize-mp3)
 
 # First run
 
