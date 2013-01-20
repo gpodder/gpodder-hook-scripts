@@ -10,6 +10,7 @@
  * python-mock
  * python-feedparser
  * python-mygpoclient
+ * python-kaa-metadata
 
  * libavcodec-extra-53 (at least on Ubuntu 12.10)
  * lame (to encode mp3 for normalize-mp3)
