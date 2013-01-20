@@ -18,9 +18,9 @@ class TestNormalizeAudio(unittest.TestCase):
     def setUp(self):
         self.core, podcast_list = utils.init_test(
             EXTENSION_FILE,
-            [(data.TEST_PODCASTS['DeimHart'], True),
-             (data.TEST_PODCASTS['TinFoilHat'], True),
-             (data.TEST_PODCASTS['drovics'], True)
+            [data.TEST_PODCASTS['DeimHart'],
+             data.TEST_PODCASTS['TinFoilHat'],
+             data.TEST_PODCASTS['drovics']
             ]
         )
         (self.ogg_episode, self.ogg_file, self.mp3_episode,

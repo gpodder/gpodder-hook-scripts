@@ -16,7 +16,7 @@ class TestTedSubtitles(unittest.TestCase):
     def setUp(self):
         self.core, podcast_list = utils.init_test(
             EXTENSION_FILE,
-            [(data.TEST_PODCASTS['TEDTalks'], True)]
+            [data.TEST_PODCASTS['TEDTalks']]
         )
         self.episode, self.filename = podcast_list
         self.srt_filename = os.path.splitext(self.filename)[0] + ".srt"

@@ -18,8 +18,8 @@ class TestM4AConversion(unittest.TestCase):
     def setUp(self):
         self.core, podcast_list = utils.init_test(
             EXTENSION_FILE,
-            [(data.TEST_PODCASTS['LogbuchNetzpolitik'], True),
-             (data.TEST_PODCASTS['TinFoilHat'], False)
+            [data.TEST_PODCASTS['LogbuchNetzpolitik'],
+             data.TEST_PODCASTS['TinFoilHat']
             ]
         )
         self.episode, self.filename, self.episode1, self.filename1 = podcast_list

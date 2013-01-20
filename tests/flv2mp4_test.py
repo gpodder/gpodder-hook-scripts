@@ -17,8 +17,8 @@ class TestFlv2Mp4(unittest.TestCase):
     def setUp(self):
         self.core, podcast_list = utils.init_test(
             EXTENSION_FILE,
-            [(data.TEST_PODCASTS['drovics'], True),
-             (data.TEST_PODCASTS['TinFoilHat'], True)
+            [data.TEST_PODCASTS['drovics'],
+             data.TEST_PODCASTS['TinFoilHat']
             ]
         )
         self.episode, self.filename, self.episode1, self.filename1 = podcast_list

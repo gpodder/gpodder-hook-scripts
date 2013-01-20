@@ -16,14 +16,15 @@ EXTENSION_NAME = 'rm_ogg_cover'
 EXTENSION_FILE = os.path.join(os.environ['GPODDER_EXTENSIONS'], EXTENSION_NAME+'.py')
 
 
-class TestTagging(unittest.TestCase):
+class TestRmOggCover(unittest.TestCase):
     def setUp(self):
         self.core, podcast_list = utils.init_test(
             EXTENSION_FILE,
-            [(data.TEST_PODCASTS['DeimHart'], True),
-             (data.TEST_PODCASTS['TinFoilHat'], True),
+            [data.TEST_PODCASTS['DeimHart'],
+             data.TEST_PODCASTS['TinFoilHat'],
             ]
         )
+        
         (self.ogg_episode, self.ogg_file, self.mp3_episode,
             self.mp3_file)  = podcast_list
         self.ogg_file_save = self.save_episode(self.ogg_file)
@@ -62,6 +63,7 @@ class TestTagging(unittest.TestCase):
         self.assertFalse(ogg.has_key('coverartdescription'))
 
     def test_context_menu(self):
+        self.assertTrue(os.path.exists(self.ogg_file))
+        self.assertTrue(os.path.exists(self.mp3_file))
         self.assertFalse(gpodder.user_extensions.on_episodes_context_menu([self.mp3_episode,]))
         self.assertTrue(gpodder.user_extensions.on_episodes_context_menu([self.ogg_episode,]))
-

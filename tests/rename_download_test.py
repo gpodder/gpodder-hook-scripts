@@ -16,7 +16,7 @@ class TestRenameDownloads(unittest.TestCase):
     def setUp(self):
         self.core, podcast_list = utils.init_test(
             EXTENSION_FILE,
-            [(data.TEST_PODCASTS['TinFoilHat'], True)]
+            [data.TEST_PODCASTS['TinFoilHat']]
         )
         self.episode, self.filename = podcast_list
 
