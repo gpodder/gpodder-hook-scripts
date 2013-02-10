@@ -11,7 +11,7 @@ import utils
 
 EXTENSION_NAME = 'm4a_converter'
 EXTENSION_FILE = os.path.join(os.environ['GPODDER_EXTENSIONS'], EXTENSION_NAME+'.py')
-MIME_TYPES = ['audio/x-m4a', 'audio/mp4']
+MIME_TYPES = ['audio/x-m4a', 'audio/mp4', 'audio/mp4a-latm']
 
 
 class TestM4AConversion(unittest.TestCase):
@@ -26,14 +26,7 @@ class TestM4AConversion(unittest.TestCase):
         self.converted_mp3 = os.path.splitext(self.filename)[0] + '.mp3'
         self.converted_ogg = os.path.splitext(self.filename)[0] + '.ogg'
 
-        # workaround for wrong mimetype from the metaebene server
-        # I already contacted Tim Pritlove to correct the wrong mimetype
-        if os.path.splitext(self.filename)[1] == '.m4a' and self.episode.mime_type != 'audio/mp4':
-            self.episode.mime_type = 'audio/mp4'
-        ## end of workaround
-
         self.core.config.extensions.enabled = [EXTENSION_NAME]
-
         self.extension = gpodder.user_extensions.containers[0].module
 
     def tearDown(self):
@@ -45,7 +38,6 @@ class TestM4AConversion(unittest.TestCase):
         self.core.shutdown()
 
     def test_context_menu(self):
-        self.assertIn(self.episode.mime_type, MIME_TYPES)
         self.assertNotIn(self.episode1.mime_type, MIME_TYPES)
 
         self.assertTrue(gpodder.user_extensions.on_episodes_context_menu([self.episode,]))
