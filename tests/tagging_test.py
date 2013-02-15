@@ -53,3 +53,12 @@ class TestTagging(unittest.TestCase):
         self.assertEqual(info['title'], audio.tags['title'][0])
         self.assertEqual(info['pubDate'], audio.tags['date'][0])
         self.assertEqual('Podcast', audio.tags['genre'][0])
+
+    def test_removetags(self):
+        self.core.config.extensions.tagging.always_remove_tags = True
+        info = self.tag_extension.read_episode_info(self.episode)
+        self.tag_extension.write_info2file(info)
+
+        audio = File(info['filename'], easy=True)
+        self.assertIsNotNone(audio)
+        self.assertIsNone(audio.tags)
