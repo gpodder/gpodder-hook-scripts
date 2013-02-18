@@ -43,10 +43,23 @@ class gPodderExtension:
 
         # Dependency checks
         self.command = self.container.require_any_command(['avconv', 'ffmpeg'])
-        self.command_param = self.CMD[os.path.basename(self.command)]
+
+        # extract command without extension (.exe on Windows) from command-string
+        command_without_ext = os.path.basename(os.path.splitext(self.command)[0])
+        self.command_param = self.CMD[command_without_ext]
 
     def on_episode_downloaded(self, episode):
         self._convert_episode(episode)
+
+    def _check_mp4(self, episode):
+        if episode.mime_type in self.MIME_TYPES:
+            return True
+
+        # Also check file extension (bug 1770)
+        if episode.extension() == self.EXT:
+            return True
+
+        return False
 
     def on_episodes_context_menu(self, episodes):
         if not self.config.context_menu:
@@ -55,10 +68,7 @@ class gPodderExtension:
         if not all(e.was_downloaded(and_exists=True) for e in episodes):
             return None
 
-        # add additional file-extension check (#bug1770)
-        mimecheck = [e.mime_type in self.MIME_TYPES for e in episodes]
-        extcheck = [e.local_filename(create=False).endswith(self.EXT) for e in episodes]
-        if not any(mimecheck + extcheck):
+        if not any(self._check_mp4(episode) for episode in episodes):
             return None
 
         target_format = ('OGG' if self.config.use_ogg else 'MP3')
@@ -69,8 +79,7 @@ class gPodderExtension:
     def _convert_episode(self, episode):
         old_filename = episode.local_filename(create=False)
 
-        # add additional file-extension check (#bug1770)
-        if episode.mime_type not in self.MIME_TYPES and not old_filename.endswith(self.EXT):
+        if not self._check_mp4(episode):
             return
 
         if self.config.use_ogg:
