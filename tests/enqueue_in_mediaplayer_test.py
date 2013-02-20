@@ -39,3 +39,4 @@ class TestEnqueueInMediaPlayer(unittest.TestCase):
         self.assertEqual(len(menu_entry[0]), 2)
 
         self.assertTrue('Enqueue in/VLC' in map(lambda x: x[0], menu_entry))
+        self.assertTrue('Enqueue in/Totem' in map(lambda x: x[0], menu_entry))
