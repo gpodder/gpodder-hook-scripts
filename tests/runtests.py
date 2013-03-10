@@ -96,6 +96,7 @@ if __name__ == "__main__":
 
     #import all test files
     import enqueue_in_mediaplayer_test
+    import convert2avi_test
     #import flv2mp4_test
     import m4a_converter_test
     import normalize_audio_test
@@ -109,6 +110,7 @@ if __name__ == "__main__":
     loader = unittest.TestLoader()
 
     suite = loader.loadTestsFromModule(enqueue_in_mediaplayer_test)
+    suite.addTests(loader.loadTestsFromModule(convert2avi_test))
     suite.addTests(loader.loadTestsFromModule(m4a_converter_test))
     suite.addTests(loader.loadTestsFromModule(normalize_audio_test))
     suite.addTests(loader.loadTestsFromModule(ogg2mp3_converter_test))
