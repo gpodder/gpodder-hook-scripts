@@ -20,21 +20,21 @@ class TestNormalizeAudio(unittest.TestCase):
             EXTENSION_FILE,
             [data.TEST_PODCASTS['DeimHart'],
              data.TEST_PODCASTS['TinFoilHat'],
-             data.TEST_PODCASTS['drovics']
+             data.TEST_PODCASTS['TEDTalks']
             ]
         )
         (self.ogg_episode, self.ogg_file, self.mp3_episode,
-            self.mp3_file, self.flv_episode, self.flv_file)  = podcast_list
+            self.mp3_file, self.mp4_episode, self.mp4_file)  = podcast_list
         self.ogg_file_save = self.save_episode(self.ogg_file)
         self.mp3_file_save = self.save_episode(self.mp3_file)
-        self.flv_file_save = self.save_episode(self.flv_file)
+        self.mp4_file_save = self.save_episode(self.mp4_file)
 
         self.core.config.extensions.enabled = [EXTENSION_NAME]
 
     def tearDown(self):
         shutil.move(self.ogg_file_save, self.ogg_file)
         shutil.move(self.mp3_file_save, self.mp3_file)
-        shutil.move(self.flv_file_save, self.flv_file)
+        shutil.move(self.mp4_file_save, self.mp4_file)
 
         self.core.shutdown()
 
@@ -60,4 +60,4 @@ class TestNormalizeAudio(unittest.TestCase):
     def test_context_menu(self):
         self.assertTrue(gpodder.user_extensions.on_episodes_context_menu([self.mp3_episode,]))
         self.assertTrue(gpodder.user_extensions.on_episodes_context_menu([self.ogg_episode,]))
-        self.assertFalse(gpodder.user_extensions.on_episodes_context_menu([self.flv_episode,]))
+        self.assertFalse(gpodder.user_extensions.on_episodes_context_menu([self.mp4_episode,]))

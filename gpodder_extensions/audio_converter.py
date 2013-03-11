@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Convertes mp4 and flv video files to avi
+# Convertes m4a audio files to mp3
 # This requires ffmpeg to be installed. Also works as a context
 # menu item for already-downloaded files.
 #
@@ -17,21 +17,26 @@ logger = logging.getLogger(__name__)
 
 _ = gpodder.gettext
 
-__title__ = _('Convert video file (m4v,mp4,flv) to AVI')
-__description__ = _('Transcode video files (m4v,mp4,flv) to avi using ffmpeg')
-__authors__ = 'Bernd Schlapsi <brot@gmx.info>'
+__title__ = _('Convert audio files')
+__description__ = _('Transcode audio files to mp3/ogg')
+__authors__ = 'Bernd Schlapsi <brot@gmx.info>, Thomas Perl <thp@gpodder.org>'
 __category__ = 'post-download'
 
 
 DefaultConfig = {
+    'use_ogg': False, # Set to True to convert to .ogg (otherwise .mp3)
     'context_menu': True, # Show the conversion option in the context menu
 }
 
 class gPodderExtension:
-    MIME_TYPES = ['video/mp4', 'video/m4v', 'video/x-flv']
-    EXT = ['.mp4', '.m4v', '.flv']
-    CMD = {'avconv': ['-i', '%(old_file)s', '-codec', 'copy', '%(new_file)s'],
-           'ffmpeg': ['-i', '%(old_file)s', '-codec', 'copy', '%(new_file)s']
+    MIME_TYPES = ('audio/x-m4a', 'audio/mp4', 'audio/mp4a-latm', 'audio/ogg', )
+    EXT = ('.m4a', '.ogg')
+    CMD = {'avconv': {'.mp3': ['-i', '%(old_file)s', '-q:a', '2', '-id3v2_version', '3', '-write_id3v1', '1', '%(new_file)s'],
+                      '.ogg': ['-i', '%(old_file)s', '-q:a', '2', '%(new_file)s']
+                     },
+           'ffmpeg': {'.mp3': ['-i', '%(old_file)s', '-q:a', '2', '-id3v2_version', '3', '-write_id3v1', '1', '%(new_file)s'],
+                      '.ogg': ['-i', '%(old_file)s', '-q:a', '2', '%(new_file)s']
+                     }
           }
 
     def __init__(self, container):
@@ -42,17 +47,22 @@ class gPodderExtension:
         self.command = self.container.require_any_command(['avconv', 'ffmpeg'])
 
         # extract command without extension (.exe on Windows) from command-string
-        command_without_ext = os.path.basename(os.path.splitext(self.command)[0])
-        self.command_param = self.CMD[command_without_ext]
+        self.command_without_ext = os.path.basename(os.path.splitext(self.command)[0])
 
     def on_episode_downloaded(self, episode):
         self._convert_episode(episode)
+        
+    def _get_new_extension(self):
+        return ('.ogg' if self.config.use_ogg else '.mp3')
 
     def _check_source(self, episode):
+        if episode.extension() == self._get_new_extension():
+            return False
+            
         if episode.mime_type in self.MIME_TYPES:
             return True
 
-        # Also check file extension
+        # Also check file extension (bug 1770)
         if episode.extension() in self.EXT:
             return True
 
@@ -68,22 +78,25 @@ class gPodderExtension:
         if not any(self._check_source(episode) for episode in episodes):
             return None
 
-        menu_item = _('Convert to AVI')
+        target_format = ('OGG' if self.config.use_ogg else 'MP3')
+        menu_item = _('Convert to %(format)s') % {'format': target_format}
 
         return [(menu_item, self._convert_episodes)]
 
     def _convert_episode(self, episode):
-        old_filename = episode.local_filename(create=False)
-
         if not self._check_source(episode):
             return
 
+        new_extension = self._get_new_extension()
+        old_filename = episode.local_filename(create=False)
         filename, old_extension = os.path.splitext(old_filename)
-        new_filename = filename + '.avi'
+        new_filename = filename + new_extension
 
+        cmd_param = self.CMD[self.command_without_ext][new_extension]
         cmd = [self.command] + \
             [param % {'old_file': old_filename, 'new_file': new_filename}
-                for param in self.command_param]
+                for param in cmd_param]
+
         ffmpeg = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE)
         stdout, stderr = ffmpeg.communicate()
@@ -92,10 +105,10 @@ class gPodderExtension:
             util.rename_episode_file(episode, new_filename)
             os.remove(old_filename)
             
-            logger.info('Converted video file to AVI.')
+            logger.info('Converted audio file to %(format)s.' % {'format': new_extension})
             gpodder.user_extensions.on_notification_show(_('File converted'), episode.title)
         else:
-            logger.warn('Error converting video file: %s / %s', stdout, stderr)
+            logger.warn('Error converting audio file: %s / %s', stdout, stderr)
             gpodder.user_extensions.on_notification_show(_('Conversion failed'), episode.title)
 
     def _convert_episodes(self, episodes):

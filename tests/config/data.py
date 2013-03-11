@@ -43,10 +43,4 @@ TEST_PODCASTS = {
                  'url': 'file://%s/tedtalks_video.rss' % config_dir,
                  'mediafile': '%s/MattCutts_2011U.mp4' % config_dir,
                  'episode': -31},
-
-    # YouTube-Channel
-    'drovics': { #'url': 'https://www.youtube.com/user/drovics',
-                'url': 'http://gdata.youtube.com/feeds/base/users/drovics/uploads?alt=rss&v=2&orderby=published&client=ytapi-youtube-profile',
-                'mediafile': '%s/Ballad of Saed Bannoura.flv' % config_dir,
-                'episode': 0 },
 }

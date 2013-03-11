@@ -96,33 +96,26 @@ if __name__ == "__main__":
 
     #import all test files
     import enqueue_in_mediaplayer_test
-    import convert2avi_test
-    #import flv2mp4_test
-    import m4a_converter_test
+    import audio_converter_test
     import normalize_audio_test
-    import ogg2mp3_converter_test
     import rename_download_test
     import rm_ogg_cover_test
     import rockbox_convert2mp4_test
     import tagging_test
     import ted_subtitles_test
+    import video_converter_test
 
     loader = unittest.TestLoader()
 
     suite = loader.loadTestsFromModule(enqueue_in_mediaplayer_test)
-    suite.addTests(loader.loadTestsFromModule(convert2avi_test))
-    suite.addTests(loader.loadTestsFromModule(m4a_converter_test))
+    suite.addTests(loader.loadTestsFromModule(audio_converter_test))
     suite.addTests(loader.loadTestsFromModule(normalize_audio_test))
-    suite.addTests(loader.loadTestsFromModule(ogg2mp3_converter_test))
     suite.addTests(loader.loadTestsFromModule(rename_download_test))
     suite.addTests(loader.loadTestsFromModule(rm_ogg_cover_test))
     suite.addTests(loader.loadTestsFromModule(rockbox_convert2mp4_test))
     suite.addTests(loader.loadTestsFromModule(tagging_test))
     suite.addTests(loader.loadTestsFromModule(ted_subtitles_test))
-
-    # this is the last test, because it converts the flv file which is used in tests above
-    # dont' work at the moment. Couldn't figure out how to get the flv file instead the mp4
-    #suite.addTests(loader.loadTestsFromModule(flv2mp4_test))
+    suite.addTests(loader.loadTestsFromModule(video_converter_test))
 
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
