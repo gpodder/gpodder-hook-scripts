@@ -85,9 +85,10 @@ def init_data(gpo_dir):
 if __name__ == "__main__":
     args = read_args()
     append_python_path(args.gpo, extension_dir)
-
+    
     test_dir = os.path.dirname(__file__)
     gpo_dir = os.path.join(test_dir, 'gpodder3')
+    os.environ['GPODDER_SRC'] = args.gpo
     os.environ['GPODDER_HOME'] = os.path.join(gpo_dir, 'config')
     os.environ['GPODDER_DOWNLOAD_DIR'] = os.path.join(gpo_dir, 'config', 'Downloads')
     os.environ['GPODDER_EXTENSIONS'] = extension_dir

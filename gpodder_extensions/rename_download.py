@@ -16,6 +16,8 @@ _ = gpodder.gettext
 __title__ = _('Rename episodes after download')
 __description__ = _('Rename episodes to "<Episode Title>.<ext>" on download')
 __authors__ = 'Bernd Schlapsi <brot@gmx.info>, Thomas Perl <thp@gpodder.org>'
+__doc__ = 'http://wiki.gpodder.org/wiki/Extensions/RenameAfterDownload'
+__payment__ = 'https://flattr.com/submit/auto?user_id=BerndSch&url=http://wiki.gpodder.org/wiki/Extensions/RenameAfterDownload'
 __category__ = 'post-download'
 
 
@@ -39,7 +41,9 @@ class gPodderExtension:
         basename, ext = os.path.splitext(filename)
 
         new_basename = util.sanitize_encoding(title) + ext
-        new_basename = util.sanitize_filename(new_basename)
+        # On Windows, force ASCII encoding for filenames (bug 1724)
+        new_basename = util.sanitize_filename(new_basename,
+                use_ascii=gpodder.ui.win32)
         new_filename = os.path.join(dirname, new_basename)
 
         if new_filename == current_filename:

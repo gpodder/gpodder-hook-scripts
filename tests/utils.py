@@ -13,7 +13,8 @@ def init_test(extension_file, podcast_configs):
     podcast_list = []
 
     for podcast_config in podcast_configs:
-        podcast = gpo_core.model.load_podcast(podcast_config['url'])
+        podcasts = gpo_core.model.get_podcasts()
+        podcast = [podcast for podcast in podcasts if podcast.url == podcast_config['url']][0]
         episode = podcast.get_all_episodes()[podcast_config['episode']]
 
         filename = episode.local_filename(create=False, check_only=True)

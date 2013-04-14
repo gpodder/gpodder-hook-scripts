@@ -7,6 +7,7 @@ import unittest
 from mutagen import File
 
 import gpodder
+gpodder.images_folder = os.path.join(os.environ['GPODDER_SRC'], 'share', 'gpodder', 'images')
 
 from config import data
 import utils
@@ -44,7 +45,7 @@ class TestTagging(unittest.TestCase):
 
     def test_write2file(self):
         info = self.tag_extension.read_episode_info(self.episode)
-        self.tag_extension.write_info2file(info)
+        self.tag_extension.write_info2file(info, self.episode)
 
         audio = File(info['filename'], easy=True)
         self.assertIsNotNone(audio)
@@ -57,8 +58,15 @@ class TestTagging(unittest.TestCase):
     def test_removetags(self):
         self.core.config.extensions.tagging.always_remove_tags = True
         info = self.tag_extension.read_episode_info(self.episode)
-        self.tag_extension.write_info2file(info)
+        self.tag_extension.write_info2file(info, self.episode)
 
         audio = File(info['filename'], easy=True)
         self.assertIsNotNone(audio)
         self.assertIsNone(audio.tags)
+
+    def test_writecover(self):
+        self.core.config.extensions.tagging.auto_embed_coverart = True
+        info = self.tag_extension.read_episode_info(self.episode)
+        self.tag_extension.write_info2file(info, self.episode)
+        
+        #TODO: add asserts
