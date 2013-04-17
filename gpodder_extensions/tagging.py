@@ -173,7 +173,7 @@ class gPodderExtension:
         info = self.read_episode_info(episode)
         if info['filename'] is None:
             return
-            
+
         self.write_info2file(info, episode)
 
     def get_audio(self, info, episode):
@@ -245,7 +245,7 @@ class gPodderExtension:
                 info['pubDate'] = None
 
         return info
-        
+
     def write_info2file(self, info, episode):
         audio = self.get_audio(info, episode)
 
